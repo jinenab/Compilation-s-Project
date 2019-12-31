@@ -3,6 +3,7 @@ import java.util.Vector;
 public class Grammaire {
 Vector<String> nonTerminal=new Vector<String>();
 Vector<String> grammaire=new Vector<String>();
+Vector<String> premier=new Vector<String>();
 public Grammaire() {
 	super();
 	Scanner scanner = new Scanner(System.in);
@@ -52,5 +53,37 @@ public void setGrammaire(Vector<String> grammaire) {
 	this.grammaire = grammaire;
 }
 
+public boolean nonTerminal(char element) {
+	for(int i=0;i<nonTerminal.size();i++) {
+		if(element==nonTerminal.elementAt(i).charAt(0))
+			return true;
+	}
+	return false;
+}
 
+
+public String premierElement(char element) {
+	String premiers=new String();
+	int fromIndex=0;
+	if(   nonTerminal(element)==false  ){
+	   premiers=premiers+element;
+		
+	}
+	for(int i=0;i<grammaire.size();i++) {
+		if(grammaire.elementAt(i).charAt(0)==element) {
+		
+				
+				premiers=premiers+premierElement(grammaire.elementAt(i).charAt(1));
+				while(grammaire.elementAt(i).indexOf("|", fromIndex)>=0) {
+					int index=grammaire.elementAt(i).indexOf("|", fromIndex)+1;
+					premiers=premiers+premierElement(grammaire.elementAt(i).charAt(index));
+					fromIndex=index;
+					
+				}
+				
+
+		}
+	}
+	return premiers;
+}
 }
