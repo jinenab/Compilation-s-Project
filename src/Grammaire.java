@@ -1,4 +1,7 @@
+import java.io.Serializable;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 public class Grammaire {
 Vector<String> nonTerminal=new Vector<String>();
@@ -15,11 +18,11 @@ public Grammaire() {
 		String s =scanner.next();
         nonTerminal.add(s);
 	}
-	System.out.println("Veuillez saisir le nombre de régles");
+	System.out.println("Veuillez saisir le nombre de rÃ©gles");
 	n = scanner.nextInt();
 	for(int i = 0;i<n;i++)
 	{
-		System.out.println("Saisir une régle");
+		System.out.println("Saisir une rÃ©gle");
         grammaire.add(scanner.next());
 	}
 	
@@ -32,8 +35,8 @@ public String affichage() {
 	for(int i=0;i<grammaire.size();i++) {
 		s=s+grammaire.elementAt(i).charAt(0)+"-->"+grammaire.elementAt(i).substring(1, grammaire.elementAt(i).length())+" , ";
 	}
+	return (String) s.subSequence(0, s.length()-2);
 	
-	return s;
 }
 
 @Override
@@ -62,28 +65,53 @@ public boolean nonTerminal(char element) {
 }
 
 
-public String premierElement(char element) {
-	String premiers=new String();
+public TreeSet premierElement(char element) {
+	TreeSet premiers=new TreeSet();
 	int fromIndex=0;
-	if(   nonTerminal(element)==false  ){
-	   premiers=premiers+element;
-		
-	}
+	if(nonTerminal(element)==false)
+	   premiers.add(element);
+	else {
 	for(int i=0;i<grammaire.size();i++) {
 		if(grammaire.elementAt(i).charAt(0)==element) {
+			
+
+			 
+			while(grammaire.elementAt(i).indexOf("|", fromIndex)>=0) {
+				
+				int index=grammaire.elementAt(i).indexOf("|", fromIndex)+1;
+				 premiers.addAll(premierElement(grammaire.elementAt(i).charAt(index))) ;	
+
+				if(nonTerminal(grammaire.elementAt(i).charAt(index))==true)
+			
+				{					premiers.remove('e');
+				}
+					fromIndex=index;
+
+
+				 }
+			premiers.addAll(premierElement(grammaire.elementAt(i).charAt(1)));
+			if(nonTerminal(grammaire.elementAt(i).charAt(1))==true)
+			{
+			premiers.remove('e');
+		}
+			}
+
 		
 				
-				premiers=premiers+premierElement(grammaire.elementAt(i).charAt(1));
-				while(grammaire.elementAt(i).indexOf("|", fromIndex)>=0) {
-					int index=grammaire.elementAt(i).indexOf("|", fromIndex)+1;
-					premiers=premiers+premierElement(grammaire.elementAt(i).charAt(index));
-					fromIndex=index;
 					
-				}
+				}}
 				
+	return premiers;
 
 		}
-	}
-	return premiers;
+
+public Vector<String> getPremier() {
+	return premier;
 }
+
+public void setPremier(Vector<String> premier) {
+	this.premier = premier;
 }
+	
+}
+

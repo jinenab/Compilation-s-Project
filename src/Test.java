@@ -5,7 +5,12 @@ public class Test {
 		Grammaire grammaire= new Grammaire();
 		System.out.println(grammaire);
 		System.out.println("******Premiers******");
-		System.out.println(grammaire.premierElement('E'));
+		for(int i=0;i<grammaire.getNonTerminal().size();i++) {
+			System.out.println(grammaire.getNonTerminal().elementAt(i));
+			System.out.println(grammaire.premierElement( grammaire.getNonTerminal().elementAt(i).charAt(0) ));
+
+		}
+	
 	}
 
 }
